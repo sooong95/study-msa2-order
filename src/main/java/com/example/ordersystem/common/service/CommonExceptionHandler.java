@@ -29,9 +29,4 @@ public class CommonExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<?> accessDenyException(AccessDeniedException e) {
-        e.printStackTrace();
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
-    }
 }
