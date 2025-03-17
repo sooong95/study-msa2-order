@@ -45,7 +45,6 @@ public class MemberController {
     }
 
     @GetMapping("/list")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> memberList(){
         List<MemberResDto> memberResDto = memberService.findAll();
         return new ResponseEntity<>(memberResDto, HttpStatus.OK);

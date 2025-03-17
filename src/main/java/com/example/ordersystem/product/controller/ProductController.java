@@ -18,7 +18,6 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize(("hasRole('ADMIN')"))
     public ResponseEntity<?> productCreate(ProductRegisterDto dto){
         Product product = productService.productCreate(dto);
         return new ResponseEntity<>(product.getId(), HttpStatus.CREATED);
