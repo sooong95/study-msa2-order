@@ -5,14 +5,10 @@ import com.example.ordersystem.member.dto.LoginDto;
 import com.example.ordersystem.member.dto.MemberResDto;
 import com.example.ordersystem.member.dto.MemberSaveReqDto;
 import com.example.ordersystem.member.repository.MemberRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 

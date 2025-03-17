@@ -28,7 +28,7 @@ public class OrderingService {
         this.productRepository = productRepository;
     }
 
-    synchronized public Ordering orderCreate(OrderCreateDto orderDto){
+    public Ordering orderCreate(OrderCreateDto orderDto){
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
         Member member = memberRepository.findById(Long.parseLong(id)).orElseThrow(()-> new EntityNotFoundException("member is not found"));
 
