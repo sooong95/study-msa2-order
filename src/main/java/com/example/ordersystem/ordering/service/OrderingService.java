@@ -2,7 +2,6 @@ package com.example.ordersystem.ordering.service;
 
 import com.example.ordersystem.member.domain.Member;
 import com.example.ordersystem.member.repository.MemberRepository;
-import com.example.ordersystem.ordering.domain.OrderDetail;
 import com.example.ordersystem.ordering.domain.Ordering;
 import com.example.ordersystem.ordering.dto.OrderCreateDto;
 import com.example.ordersystem.ordering.repository.OrderingRepository;
@@ -29,28 +28,22 @@ public class OrderingService {
         this.productRepository = productRepository;
     }
 
-    synchronized public Ordering orderCreate(List<OrderCreateDto> dtos){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new EntityNotFoundException("member is not found"));
+    synchronized public Ordering orderCreate(OrderCreateDto orderDto){
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findById(Long.parseLong(id)).orElseThrow(()-> new EntityNotFoundException("member is not found"));
 
+        Product product = productRepository.findById(orderDto.getProductId()).orElseThrow(()->new EntityNotFoundException("product is not found"));
+        int quantity = orderDto.getProductCount();
+        if(product.getStockQuantity() < quantity){
+            throw new IllegalArgumentException("재고 부족");
+        }else {
+            product.updateStockQuantity(orderDto.getProductCount());
+        }
         Ordering ordering = Ordering.builder()
                 .member(member)
+                .product(product)
+                .quantity(orderDto.getProductCount())
                 .build();
-        for(OrderCreateDto o : dtos){
-            Product product = productRepository.findById(o.getProductId()).orElseThrow(()->new EntityNotFoundException("product is not found"));
-            int quantity = o.getProductCount();
-            if(product.getStockQuantity() < quantity){
-                throw new IllegalArgumentException("재고 부족");
-            }else {
-                product.updateStockQuantity(o.getProductCount());
-            }
-            OrderDetail orderDetail = OrderDetail.builder()
-                    .ordering(ordering)
-                    .product(product)
-                    .quantity(o.getProductCount())
-                    .build();
-            ordering.getOrderDetails().add(orderDetail);
-        }
         orderingRepository.save(ordering);
         return  ordering;
     }

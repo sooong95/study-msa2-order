@@ -19,7 +19,7 @@ public class OrderingController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> orderCreate(@RequestBody List<OrderCreateDto> dtos){
+    public ResponseEntity<?> orderCreate(@RequestBody OrderCreateDto dtos){
         Ordering ordering = orderingService.orderCreate(dtos);
         return new ResponseEntity<>(ordering.getId(), HttpStatus.CREATED);
     }

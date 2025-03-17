@@ -35,8 +35,8 @@ public class JwtTokenProvider {
         ENCRYPT_RT_SECRET_KEY = new SecretKeySpec(java.util.Base64.getDecoder().decode(secretKeyRt), SignatureAlgorithm.HS512.getJcaName());
     }
 
-    public String createToken(String email, String role){
-        Claims claims = Jwts.claims().setSubject(email);
+    public String createToken(String id, String role){
+        Claims claims = Jwts.claims().setSubject(id);
         claims.put("role", role);
         Date now = new Date();
         //        claims는 사용자정보(페이로드 정보)

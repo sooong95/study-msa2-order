@@ -24,7 +24,7 @@ public class ProductService {
 
     public Product productCreate(ProductRegisterDto dto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(()->new EntityNotFoundException("member is not found"));
+        Member member = memberRepository.findById(Long.parseLong(authentication.getName())).orElseThrow(()->new EntityNotFoundException("member is not found"));
 
         Product product = productRepository.save(dto.toEntity(member));
         return product;
