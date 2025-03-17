@@ -33,8 +33,6 @@ public class Member extends BaseTimeEntity {
     @Builder.Default
     private Role role = Role.USER;
 
-    @OneToMany(mappedBy = "member")
-    private List<Ordering> orderingList;
 
     public MemberResDto fromEntity(){
         return MemberResDto.builder()

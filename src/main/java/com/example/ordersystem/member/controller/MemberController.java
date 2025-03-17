@@ -44,12 +44,6 @@ public class MemberController {
         return new ResponseEntity<>(memberId, HttpStatus.CREATED);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<?> memberList(){
-        List<MemberResDto> memberResDto = memberService.findAll();
-        return new ResponseEntity<>(memberResDto, HttpStatus.OK);
-    }
-
     @PostMapping("/doLogin")
     public ResponseEntity<?> doLogin(@RequestBody LoginDto dto){
 //        email, password 검증

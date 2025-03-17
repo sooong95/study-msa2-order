@@ -32,11 +32,6 @@ public class MemberService {
         Member member = memberRepository.save(memberSaveReqDto.toEntity(password));
         return  member.getId();
     }
-    public List<MemberResDto> findAll(){
-        List<Member> members = memberRepository.findAll();
-        return members.stream().map(a->a.fromEntity()).toList();
-    }
-
     public Member login(LoginDto dto){
         boolean check = true;
 //        email존재여부
