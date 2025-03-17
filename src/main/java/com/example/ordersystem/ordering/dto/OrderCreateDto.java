@@ -1,6 +1,5 @@
 package com.example.ordersystem.ordering.dto;
 
-import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

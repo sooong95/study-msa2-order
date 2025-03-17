@@ -4,7 +4,6 @@ import com.example.ordersystem.member.service.JwtTokenProvider;
 import com.example.ordersystem.member.domain.Member;
 import com.example.ordersystem.member.dto.LoginDto;
 import com.example.ordersystem.member.dto.MemberRefreshDto;
-import com.example.ordersystem.member.dto.MemberResDto;
 import com.example.ordersystem.member.dto.MemberSaveReqDto;
 import com.example.ordersystem.member.service.MemberService;
 import io.jsonwebtoken.Claims;
@@ -14,11 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 

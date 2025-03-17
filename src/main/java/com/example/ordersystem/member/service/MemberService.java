@@ -2,14 +2,12 @@ package com.example.ordersystem.member.service;
 
 import com.example.ordersystem.member.domain.Member;
 import com.example.ordersystem.member.dto.LoginDto;
-import com.example.ordersystem.member.dto.MemberResDto;
 import com.example.ordersystem.member.dto.MemberSaveReqDto;
 import com.example.ordersystem.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
