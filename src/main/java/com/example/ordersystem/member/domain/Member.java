@@ -1,7 +1,6 @@
 package com.example.ordersystem.member.domain;
 
 import com.example.ordersystem.common.domain.BaseTimeEntity;
-import com.example.ordersystem.member.dto.MemberResDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
