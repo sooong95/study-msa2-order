@@ -5,9 +5,9 @@ import com.example.ordersystem.ordering.dto.OrderCreateDto;
 import com.example.ordersystem.ordering.dto.ProductDto;
 import com.example.ordersystem.ordering.dto.ProductUpdateStockDto;
 import com.example.ordersystem.ordering.repository.OrderingRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -17,8 +17,11 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 @Transactional
 public class OrderingService {
+
     private final OrderingRepository orderingRepository;
     private final RestTemplate restTemplate;
+    private final ProductFeign productFeign;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public Ordering orderCreate(OrderCreateDto orderDto, String userId){
 
@@ -48,6 +51,38 @@ public class OrderingService {
             );
 
             restTemplate.exchange(productPutUrl, HttpMethod.PUT, updateEntity, Void.class);
+        }
+
+        Ordering ordering = Ordering.builder()
+                .memberId(Long.parseLong(userId))
+                .productId(orderDto.getProductId())
+                .quantity(orderDto.getProductCount())
+                .build();
+        orderingRepository.save(ordering);
+        return  ordering;
+    }
+
+    public Ordering orderFeignKafkaCreate(OrderCreateDto orderDto, String userId){
+
+        ProductDto productDto = productFeign.getProductById(orderDto.getProductId(), userId);
+
+        int quantity = orderDto.getProductCount();
+
+        if (productDto.getStockQuantity() < quantity) {
+            throw new IllegalArgumentException("재고 부족");
+        } else {
+
+            /*productFeign.updateProductStock(
+                    ProductUpdateStockDto.builder()
+                            .productId(orderDto.getProductId())
+                            .productQuantity(orderDto.getProductCount())
+                            .build()
+            );*/
+            kafkaTemplate.send("update-stock-topic",
+                    ProductUpdateStockDto.builder()
+                            .productId(orderDto.getProductId())
+                            .productQuantity(orderDto.getProductCount())
+                            .build());
         }
 
         Ordering ordering = Ordering.builder()
