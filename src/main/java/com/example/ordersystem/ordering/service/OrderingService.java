@@ -5,6 +5,7 @@ import com.example.ordersystem.ordering.dto.OrderCreateDto;
 import com.example.ordersystem.ordering.dto.ProductDto;
 import com.example.ordersystem.ordering.dto.ProductUpdateStockDto;
 import com.example.ordersystem.ordering.repository.OrderingRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -62,6 +63,9 @@ public class OrderingService {
         return  ordering;
     }
 
+    // circuitbreaker 는 각기 다른 name 을 가진 해당 메서드에 한해서만 유효.
+    // 즉, circuit 이 open 되어도 다른 메서드에서 product-service 에 요청을 보내는 것은 허용.
+    @CircuitBreaker(name = "productService", fallbackMethod = "fallbackProductService")
     public Ordering orderFeignKafkaCreate(OrderCreateDto orderDto, String userId){
 
         ProductDto productDto = productFeign.getProductById(orderDto.getProductId(), userId);
@@ -94,4 +98,7 @@ public class OrderingService {
         return  ordering;
     }
 
+    public void fallbackProductService(OrderCreateDto orderCreateDto, String userId, Throwable t) {
+        throw new RuntimeException("상품 서비스가 응답이 없어, 에러가 발생 했습니다. 나중에 다시 시도 해주세요.");
+    }
 }
